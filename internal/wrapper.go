@@ -52,6 +52,10 @@ func RunKubeStateMetricsWrapper(opts *options.Options) {
 		if err = cfgViper.ReadInConfig(); err != nil {
 			if errors.Is(err, viper.ConfigFileNotFoundError{}) {
 				klog.InfoS("Options configuration file not found at startup", "file", file)
+			} else if _, err = os.Stat(filepath.Clean(file)); os.IsNotExist(err) {
+				// Adding this check in addition to the above since viper.ConfigFileNotFoundError is not working as expected due to this issue -
+				// https://github.com/spf13/viper/issues/1783
+				klog.InfoS("Options configuration file not found at startup", "file", file)
 			} else {
 				klog.ErrorS(err, "Error reading options configuration file", "file", file)
 				klog.FlushAndExit(klog.ExitFlushTimeout, 1)
