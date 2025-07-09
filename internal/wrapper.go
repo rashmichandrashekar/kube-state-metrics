@@ -47,6 +47,7 @@ func RunKubeStateMetricsWrapper(opts *options.Options) {
 		cfgViper := viper.New()
 		cfgViper.SetConfigType("yaml")
 		cfgViper.SetConfigFile(file)
+		cfgViper.SetWatchConfigDelete(true)
 		if err := cfgViper.ReadInConfig(); err != nil {
 			if errors.Is(err, viper.ConfigFileNotFoundError{}) {
 				klog.ErrorS(err, "Options configuration file not found", "file", file)
