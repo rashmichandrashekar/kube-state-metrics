@@ -58,6 +58,8 @@ func RunKubeStateMetricsWrapper(opts *options.Options) {
 				klog.InfoS("Options configuration file not found at startup", "file", file)
 			} else {
 				klog.ErrorS(err, "Error reading options configuration file", "file", file)
+			}
+			if !opts.ContinueWithoutConfig {
 				klog.FlushAndExit(klog.ExitFlushTimeout, 1)
 			}
 		}
@@ -87,11 +89,17 @@ func RunKubeStateMetricsWrapper(opts *options.Options) {
 		crcViper.SetConfigFile(opts.CustomResourceConfigFile)
 		if err := crcViper.ReadInConfig(); err != nil {
 			if errors.Is(err, viper.ConfigFileNotFoundError{}) {
-				klog.ErrorS(err, "Custom resource configuration file not found", "file", opts.CustomResourceConfigFile)
+				klog.InfoS(err, "Custom resource configuration file not found", "file", opts.CustomResourceConfigFile)
+			} else if _, err = os.Stat(filepath.Clean(opts.CustomResourceConfigFile)); os.IsNotExist(err) {
+				// Adding this check in addition to the above since viper.ConfigFileNotFoundError is not working as expected due to this issue -
+				// https://github.com/spf13/viper/issues/1783
+				klog.InfoS("Custom resource configuration file not found at startup", "file", opts.CustomResourceConfigFile)
 			} else {
 				klog.ErrorS(err, "Error reading Custom resource configuration file", "file", opts.CustomResourceConfigFile)
 			}
-			klog.FlushAndExit(klog.ExitFlushTimeout, 1)
+			if !opts.ContinueWithoutCustomResourceConfigFile {
+				klog.FlushAndExit(klog.ExitFlushTimeout, 1)
+			}
 		}
 		crcViper.OnConfigChange(func(e fsnotify.Event) {
 			klog.InfoS("Changes detected", "name", e.Name)
