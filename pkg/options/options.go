@@ -47,19 +47,21 @@ type Options struct {
 	MetricOptInList      MetricSet       `yaml:"metric_opt_in_list"`
 	Resources            ResourceSet     `yaml:"resources"`
 
-	cmd                      *cobra.Command
-	Apiserver                string   `yaml:"apiserver"`
-	CustomResourceConfig     string   `yaml:"custom_resource_config"`
-	CustomResourceConfigFile string   `yaml:"custom_resource_config_file"`
-	Host                     string   `yaml:"host"`
-	Kubeconfig               string   `yaml:"kubeconfig"`
-	Namespace                string   `yaml:"namespace"`
-	Node                     NodeType `yaml:"node"`
-	Pod                      string   `yaml:"pod"`
-	TLSConfig                string   `yaml:"tls_config"`
-	TelemetryHost            string   `yaml:"telemetry_host"`
+	cmd                                     *cobra.Command
+	Apiserver                               string   `yaml:"apiserver"`
+	CustomResourceConfig                    string   `yaml:"custom_resource_config"`
+	CustomResourceConfigFile                string   `yaml:"custom_resource_config_file"`
+	ContinueWithoutCustomResourceConfigFile bool     `yaml:"continue_without_custom_resource_config_file"`
+	Host                                    string   `yaml:"host"`
+	Kubeconfig                              string   `yaml:"kubeconfig"`
+	Namespace                               string   `yaml:"namespace"`
+	Node                                    NodeType `yaml:"node"`
+	Pod                                     string   `yaml:"pod"`
+	TLSConfig                               string   `yaml:"tls_config"`
+	TelemetryHost                           string   `yaml:"telemetry_host"`
 
-	Config string
+	Config                string
+	ContinueWithoutConfig bool `yaml:"continue_without_config"`
 
 	Namespaces              NamespaceList `yaml:"namespaces"`
 	NamespacesDenylist      NamespaceList `yaml:"namespaces_denylist"`

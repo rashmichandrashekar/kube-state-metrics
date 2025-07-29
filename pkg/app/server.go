@@ -181,15 +181,18 @@ func RunKubeStateMetrics(ctx context.Context, opts *options.Options) error {
 	}
 
 	if opts.CustomResourceConfigFile != "" {
-		crcFile, err := os.ReadFile(filepath.Clean(opts.CustomResourceConfigFile))
-		if err != nil {
-			return fmt.Errorf("failed to read custom resource config file: %v", err)
+		if _, err := os.Stat(filepath.Clean(opts.CustomResourceConfigFile)); os.IsNotExist(err) {
+			klog.InfoS("config file does not exist,ignoring", "file", opts.CustomResourceConfigFile)
+		} else {
+			crcFile, err := os.ReadFile(filepath.Clean(opts.CustomResourceConfigFile))
+			if err != nil {
+				return fmt.Errorf("failed to read custom resource config file: %v", err)
+			}
+			configSuccess.WithLabelValues("customresourceconfig", filepath.Clean(opts.CustomResourceConfigFile)).Set(1)
+			configSuccessTime.WithLabelValues("customresourceconfig", filepath.Clean(opts.CustomResourceConfigFile)).SetToCurrentTime()
+			hash := md5HashAsMetricValue(crcFile)
+			configHash.WithLabelValues("customresourceconfig", filepath.Clean(opts.CustomResourceConfigFile)).Set(hash)
 		}
-		configSuccess.WithLabelValues("customresourceconfig", filepath.Clean(opts.CustomResourceConfigFile)).Set(1)
-		configSuccessTime.WithLabelValues("customresourceconfig", filepath.Clean(opts.CustomResourceConfigFile)).SetToCurrentTime()
-		hash := md5HashAsMetricValue(crcFile)
-		configHash.WithLabelValues("customresourceconfig", filepath.Clean(opts.CustomResourceConfigFile)).Set(hash)
-
 	}
 
 	resources := []string{}
@@ -543,11 +546,17 @@ func resolveCustomResourceConfig(opts *options.Options) (customresourcestate.Con
 		return yaml.NewDecoder(strings.NewReader(s)), nil
 	}
 	if file := opts.CustomResourceConfigFile; file != "" {
-		f, err := os.Open(filepath.Clean(file))
-		if err != nil {
-			return nil, fmt.Errorf("unable to open Custom Resource State Metrics file: %v", err)
+		if opts.ContinueWithoutCustomResourceConfigFile {
+			if _, err := os.Stat(filepath.Clean(file)); os.IsNotExist(err) {
+				klog.InfoS("custom resource config file does not exist,ignoring", "file", file)
+			}
+		} else {
+			f, err := os.Open(filepath.Clean(file))
+			if err != nil {
+				return nil, fmt.Errorf("unable to open Custom Resource State Metrics file: %v", err)
+			}
+			return yaml.NewDecoder(f), nil
 		}
-		return yaml.NewDecoder(f), nil
 	}
 	return nil, nil
 }

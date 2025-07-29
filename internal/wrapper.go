@@ -89,7 +89,7 @@ func RunKubeStateMetricsWrapper(opts *options.Options) {
 		crcViper.SetConfigFile(opts.CustomResourceConfigFile)
 		if err := crcViper.ReadInConfig(); err != nil {
 			if errors.Is(err, viper.ConfigFileNotFoundError{}) {
-				klog.InfoS(err, "Custom resource configuration file not found", "file", opts.CustomResourceConfigFile)
+				klog.InfoS("Custom resource configuration file not found at startup", "file", opts.CustomResourceConfigFile)
 			} else if _, err = os.Stat(filepath.Clean(opts.CustomResourceConfigFile)); os.IsNotExist(err) {
 				// Adding this check in addition to the above since viper.ConfigFileNotFoundError is not working as expected due to this issue -
 				// https://github.com/spf13/viper/issues/1783
