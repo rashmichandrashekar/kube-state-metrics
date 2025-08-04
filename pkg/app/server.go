@@ -548,7 +548,7 @@ func resolveCustomResourceConfig(opts *options.Options) (customresourcestate.Con
 	if file := opts.CustomResourceConfigFile; file != "" {
 		if opts.ContinueWithoutCustomResourceConfigFile {
 			if _, err := os.Stat(filepath.Clean(file)); os.IsNotExist(err) {
-				klog.InfoS("custom resource config file does not exist,ignoring", "file", file)
+				klog.InfoS("custom resource config file does not exist, ignoring", "file", file)
 			}
 		} else {
 			f, err := os.Open(filepath.Clean(file))
