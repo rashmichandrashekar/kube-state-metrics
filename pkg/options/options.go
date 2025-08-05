@@ -50,7 +50,7 @@ type Options struct {
 	cmd                                     *cobra.Command
 	Apiserver                               string   `yaml:"apiserver"`
 	CustomResourceConfig                    string   `yaml:"custom_resource_config"`
-	CustomResourceConfigFile                string   `yaml:"custom_resource_config_file"`
+	CustomResourceConfigFile                string   `yaml:"custom_resource_state_config_file"`
 	ContinueWithoutCustomResourceConfigFile bool     `yaml:"continue_without_custom_resource_config_file"`
 	Host                                    string   `yaml:"host"`
 	Kubeconfig                              string   `yaml:"kubeconfig"`
