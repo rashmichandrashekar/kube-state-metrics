@@ -1,0 +1,16 @@
+shard: 0
+total_shards: 4
+resources: 
+  "secrets": {}
+labels_allow_list:
+  "configmaps": 
+    - app1
+    - app2
+  "pods": 
+    - app1
+    - app2
+annotations_allow_list:
+  # "pods": 
+  #   - rashmi/io
+  "namespaces":
+    - kubernetes.io/team,...
