@@ -24,7 +24,6 @@ spec:
 <!-- markdownlint-disable blanks-around-fences -->
 <!-- markdownlint-disable link-image-reference-definitions -->
 [embedmd]:# (../../help.txt)
-
 ```txt
 $ kube-state-metrics -h
 kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
@@ -93,6 +92,5 @@ Flags:
 
 Use "kube-state-metrics [command] --help" for more information about a command.
 ```
-
 <!-- markdownlint-enable link-image-reference-definitions -->
 <!-- markdownlint-enable blanks-around-fences -->
