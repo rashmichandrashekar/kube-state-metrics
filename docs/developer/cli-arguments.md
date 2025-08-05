@@ -4,7 +4,7 @@ kube-state-metrics can be configured through command line arguments.
 
 Those arguments can be passed during startup when running locally:
 
-`kube-state-metrics --telemetry-port=8081 --kubeconfig=<KUBE-CONFIG> --apiserver=<APISERVER> ...`
+ `kube-state-metrics --telemetry-port=8081 --kubeconfig=<KUBE-CONFIG> --apiserver=<APISERVER> ...`
 
 Or configured in the `args` section of your deployment configuration in a Kubernetes / Openshift context:
 
@@ -24,6 +24,7 @@ spec:
 <!-- markdownlint-disable blanks-around-fences -->
 <!-- markdownlint-disable link-image-reference-definitions -->
 [embedmd]:# (../../help.txt)
+
 ```txt
 $ kube-state-metrics -h
 kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
@@ -45,8 +46,10 @@ Flags:
       --auto-gomemlimit                            Automatically set GOMEMLIMIT to match container or system memory limit. (experimental)
       --auto-gomemlimit-ratio float                The ratio of reserved GOMEMLIMIT memory to the detected maximum container or system memory. (experimental) (default 0.9)
       --config string                              Path to the kube-state-metrics options config file
+      --continue-without-config                    If true, kube-state-metrics continues to run even if the config file specified by --config is not present. This is useful for scenarios where config file is not provided at startup but is provided later, for e.g., via configmap. Kube-state-metrics will not exit with an error if the config file is not found, instead watches and reloads when it is created.
       --custom-resource-state-config string        Inline Custom Resource State Metrics config YAML (experimental)
       --custom-resource-state-config-file string   Path to a Custom Resource State Metrics config file (experimental)
+      --continue-without-custom-resource-state-config-file   If true, Kube-state-metrics continues to run even if the config file specified by --custom-resource-state-config-file is not present. This is useful for scenarios where config file is not provided at startup but is provided later, for e.g., via configmap. Kube-state-metrics will not exit with an error if the custom-resource-state-config file is not found, instead watches and reloads when it is created.
       --custom-resource-state-only                 Only provide Custom Resource State metrics (experimental)
       --enable-gzip-encoding                       Gzip responses when requested by clients via 'Accept-Encoding: gzip' header.
   -h, --help                                       Print Help text
@@ -90,5 +93,6 @@ Flags:
 
 Use "kube-state-metrics [command] --help" for more information about a command.
 ```
+
 <!-- markdownlint-enable link-image-reference-definitions -->
 <!-- markdownlint-enable blanks-around-fences -->
